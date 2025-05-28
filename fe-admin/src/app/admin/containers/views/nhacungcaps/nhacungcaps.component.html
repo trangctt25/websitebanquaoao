@@ -1,0 +1,60 @@
+<div class="row mt-2">
+    <div class="col-6">
+        <button mat-button class="custom-button-accent" (click)="onModalDialog()">
+            <mat-icon>add</mat-icon> Thêm
+        </button>
+    </div>
+    <div class="col-6">
+        <div fxLayout fxLayoutAlign="center center" style="display: flex;justify-content: center;">
+                <div class="search-container">
+                    <svg class="search-icon" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5
+                                   6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 
+                                   4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 
+                                   5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                        </path>
+                    </svg>
+                    <input type="text" (keyup)="doFilter($event.target.value)" placeholder="Tìm kiếm...">
+                </div>
+        </div>
+    </div>
+</div>
+<div class="mt-2">
+    <table mat-table [dataSource]="service.dataSource" matSort class="mat-elevation-z8" style="width: 100%;">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef style="width: 50px;"> Id </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ten">
+            <th mat-header-cell *matHeaderCellDef class="make-gold"> Tên </th>
+            <td mat-cell *matCellDef="let element"> {{element.ten}} </td>
+        </ng-container>
+        <ng-container matColumnDef="sdt">
+            <th mat-header-cell *matHeaderCellDef class="make-gold"> Số điện thoại </th>
+            <td mat-cell *matCellDef="let element"> {{element.sdt}} </td>
+        </ng-container>
+        <ng-container matColumnDef="thongTin">
+            <th mat-header-cell *matHeaderCellDef class="make-gold">Thông tin </th>
+            <td mat-cell *matCellDef="let element"> {{element.thongTin}} </td>
+        </ng-container>
+        <ng-container matColumnDef="diaChi">
+            <th mat-header-cell *matHeaderCellDef class="make-gold"> Địa chỉ </th>
+            <td mat-cell *matCellDef="let element"> {{element.diaChi}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="make-gold">Sửa, xóa</th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="populateForm(element)" color="primary">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <a mat-icon-button (click)="clickDelete(element.id)" color="warn">
+                    <mat-icon>delete</mat-icon>
+                </a>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+</div>

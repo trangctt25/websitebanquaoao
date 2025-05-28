@@ -1,0 +1,123 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~ngx-toastr/toastr.css';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng-primary: mat-palette($mat-indigo);
+$ng-accent: mat-palette($mat-pink, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$ng-warn: mat-palette($mat-red);
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ng-theme: mat-light-theme((
+  color: (
+    primary: $ng-primary,
+    accent: $ng-accent,
+    warn: $ng-warn,
+  )
+));
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ng-theme);
+// If you want to override variables do it here
+@import "variables";
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+// If you want to add something do it here
+@import "custom";
+
+button:focus {outline:0;}
+.mat-header-cell{
+  font-size: 13px;
+  color: antiquewhite ;
+}
+
+.custom-button-primary {
+  background-color: #1976D2;  /* Màu nền */
+  color: white;               /* Màu chữ */
+  border-radius: 4px;         /* Đường viền bo góc */
+}
+
+.custom-button-warn {
+  background-color: #D32F2F;  /* Màu nền */
+  color: white;               /* Màu chữ */
+  border-radius: 4px;         /* Đường viền bo góc */
+}
+
+.custom-button-accent {
+  background-color: #FF4081;  /* Màu nền */
+  color: white;               /* Màu chữ */
+  border-radius: 4px;         /* Đường viền bo góc */
+}
+
+.sidebar .nav-link.active {
+  background-color: #007bff;
+}
+
+app-sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+app-sidebar-nav::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+app-sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-minimizer {
+  position: relative !important;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 30px;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-container .search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  fill: #888;
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+table {
+  text-align: center;
+}
+
+th.mat-header-cell {
+  text-align: unset !important;
+  color: #fff;
+  background-color: #0072bc;
+  border-right: 1px solid #d3d3d3 !important;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+  padding-left: 0px !important;
+}
