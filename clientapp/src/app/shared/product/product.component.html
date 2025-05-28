@@ -1,0 +1,346 @@
+<section class="bg0 p-t-23">
+  <div class="container">
+    <div class="p-b-10">
+      <h3 class="ltext-103 cl5">
+        Sản phẩm mới
+      </h3>
+    </div>
+    <p-carousel [value]="products" styleClass="custom-carousel" [numVisible]="5" [numScroll]="1" [circular]="true"
+      [autoplayInterval]="2000" [responsiveOptions]="responsiveOptions">
+      <ng-template let-product pTemplate="item">
+        <div style="padding-right: 15px;padding-left: 15px;width: 100%;">
+          <div class="block2">
+            <div class="block2-pic hov-img0">
+              <img src="https://localhost:44302/Images/list-image-product/{{product.image}}"
+                style="width:180px;height:200px" alt="IMG-PRODUCT">
+              <a [routerLink]="'/product/'+product.id"
+                class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                Quick View
+              </a>
+            </div>
+            <div class="block2-txt flex-w flex-t p-t-14">
+              <div class="block2-txt-child1 flex-col-l ">
+                <a [routerLink]="'/product/'+product.id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                  {{product.ten}}
+                </a>
+                <span class="stext-105 cl3">
+                  {{product.giaBan|number}} VNĐ
+                </span>
+              </div>
+              <div class="block2-txt-child2 flex-r p-t-3">
+                <a *ngIf="!product.isLike" (click)="like(product.id)"
+                  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                  <img class="icon-heart1 dis-block trans-04" src="../../../assets/images/icons/icon-heart-01.png"
+                    alt="ICON">
+                </a>
+                <a *ngIf="product.isLike" (click)="like(product.id)"
+                  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                  <img class="icon-heart1 dis-block trans-04" src="../../../assets/images/icons/icon-heart-02.png"
+                    alt="ICON">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+    <!-- Load more
+        <div class="flex-c-m flex-w w-full p-t-45">
+            <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+                Load More
+            </a>
+        </div> -->
+  </div>
+</section>
+
+<!-- <div class="tabs-container">
+  <div class="tabs">
+    <button class="tab-button active" (click)="showTab(0)">Giới thiệu</button>
+    <button class="tab-button" (click)="showTab(1)">Sản phẩm</button>
+    <button class="tab-button" (click)="showTab(2)">Liên hệ</button>
+  </div>
+  <div class="tab-content active">
+    <h3>Giới thiệu</h3>
+    <p>Chào mừng bạn đến với Coza Store – nơi thời trang và phong cách giao thoa. Chúng tôi mang đến cho bạn những bộ sưu tập hiện đại, cá tính và đậm chất riêng.</p>
+  </div>
+  <div class="tab-content">
+    <h3>Sản phẩm</h3>
+    <p>Khám phá các dòng sản phẩm hot trend từ áo, quần, phụ kiện đến giày dép. Mỗi sản phẩm đều được tuyển chọn kỹ lưỡng với chất lượng hàng đầu.</p>
+  </div>
+  <div class="tab-content">
+    <h3>Liên hệ</h3>
+    <p>Địa chỉ: Tầng 8, 379 Hudson St, New York, NY 10018<br>
+    Hotline: (+1) 96 716 6879<br>
+    Email: support@cozastore.com</p>
+  </div>
+</div> -->
+
+<section class="bg0 p-t-23 p-b-140">
+  <div class="container">
+    <div class="p-b-10">
+      <h3 class="ltext-103 cl5">
+        Danh sách sản phẩm
+      </h3>
+    </div>
+    <div class="flex-w flex-sb-m p-b-52">
+      <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1"
+          (click)="filterByCategory(undefined)">
+          Tất cả sản phẩm
+        </button>
+        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" (click)="filterByCategory(2)">
+          Nữ
+        </button>
+        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" (click)="filterByCategory(1)">
+          Nam
+        </button>
+      </div>
+      <div class="flex-w flex-c-m m-tb-10">
+        <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+          <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+          <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i> Filter
+        </div>
+        <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+          <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+          <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i> Search
+        </div>
+      </div>
+      <!-- Search product -->
+      <div class="dis-none panel-search w-full p-t-10 p-b-15">
+        <div class="bor8 dis-flex p-l-15">
+          <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+            <i class="zmdi zmdi-search"></i>
+          </button>
+          <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" [(ngModel)]="searchText" autocomplete="off"
+            name="search-product" placeholder="Search">
+        </div>
+      </div>
+      <!-- Filter -->
+      <div class="dis-none panel-filter w-full p-t-10">
+        <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+          <div class="col-4 p-r-15 p-b-27">
+            <!-- <div class="mtext-102 cl2 p-b-15">
+              Giá
+            </div>
+            <ul>
+              <li class="p-b-6">
+                <button (click)="searchTheoGia(0,999999999,1)" *ngIf="chose_gia==1"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Tất cả
+                </button>
+                <button (click)="searchTheoGia(0,999999999,1)" *ngIf="chose_gia!=1"
+                  class="filter-link stext-106 trans-04 ">
+                  Tất cả
+                </button>
+              </li>
+              <li class="p-b-6">
+                <button (click)="searchTheoGia(100000,300000,2)" *ngIf="chose_gia==2"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  {{100000|number}} - {{300000|number}} VNĐ
+                </button>
+                <button (click)="searchTheoGia(100000,300000,2)" *ngIf="chose_gia!=2"
+                  class="filter-link stext-106 trans-04">
+                  {{100000|number}} - {{300000|number}} VNĐ
+                </button>
+              </li>
+              <li class="p-b-6">
+                <button (click)="searchTheoGia(300000,400000,3)" *ngIf="chose_gia==3"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  {{300000|number}} - {{400000|number}} VNĐ
+                </button>
+                <button (click)="searchTheoGia(300000,400000,3)" *ngIf="chose_gia!=3"
+                  class="filter-link stext-106 trans-04">
+                  {{300000|number}} - {{400000|number}} VNĐ
+                </button>
+              </li>
+              <li class="p-b-6">
+                <button (click)="searchTheoGia(400000,500000,4)" *ngIf="chose_gia==4"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  {{400000|number}} - {{500000|number}} VNĐ
+                </button>
+                <button (click)="searchTheoGia(400000,500000,4)" *ngIf="chose_gia!=4"
+                  class="filter-link stext-106 trans-04">
+                  {{400000|number}} - {{500000|number}} VNĐ
+                </button>
+              </li>
+              <li class="p-b-6">
+                <button (click)="searchTheoGia(500000,999999999,5)" *ngIf="chose_gia==5"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  {{500000|number}} +
+                </button>
+                <button (click)="searchTheoGia(500000,999999999,5)" *ngIf="chose_gia!=5"
+                  class="filter-link stext-106 trans-04">
+                  {{500000|number}} +
+                </button>
+              </li>
+            </ul> -->
+            <fieldset class="filter-group">
+              <div class="mtext-102 cl2 p-b-15">
+                Khoảng Giá
+              </div>
+              <div class="filter-group__body">
+                <div class="price-range-filter__inputs">
+                  <input type="text" aria-label="" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="price-range-filter__input" placeholder="₫ TỪ"
+                    value="" [(ngModel)]="thap">
+                  <div class="price-range-filter__range-line"></div>
+                  <input type="text" aria-label="" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="price-range-filter__input" placeholder="₫ ĐẾN"
+                    value="" [(ngModel)]="cao">
+                </div>
+              </div><button class="button-solid button-solid--primary" aria-label="" (click)="filterChanged()">Áp dụng</button>
+            </fieldset>
+          </div>
+          <div class="col-4 p-r-15 p-b-27">
+            <div class="mtext-102 cl2 p-b-15">
+              Màu
+            </div>
+            <ul>
+              <li class="p-b-6">
+                <span class="fs-15 lh-12 m-r-6" style="color: #222;">
+                  <i class="zmdi zmdi-circle"></i>
+                </span>
+                <button *ngIf="chose_mau=='Đen'" (click)="searchthemau('Đen')"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Đen
+                </button>
+                <button *ngIf="chose_mau!='Đen'" (click)="searchthemau('Đen')" class="filter-link stext-106 trans-04 ">
+                  Đen
+                </button>
+              </li>
+              <li class="p-b-6">
+                <span class="fs-15 lh-12 m-r-6" style="color: #fdfdfd;">
+                  <i class="zmdi zmdi-circle"></i>
+                </span>
+                <button *ngIf="chose_mau=='Trắng'" (click)="searchthemau('Trắng')"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Trắng
+                </button>
+                <button *ngIf="chose_mau!='Trắng'" (click)="searchthemau('Trắng')"
+                  class="filter-link stext-106 trans-04">
+                  Trắng
+                </button>
+              </li>
+              <li class="p-b-6">
+                <span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
+                  <i class="zmdi zmdi-circle"></i>
+                </span>
+                <button *ngIf="chose_mau=='Vàng'" (click)="searchthemau('Vàng')"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Vàng
+                </button>
+                <button *ngIf="chose_mau!='Vàng'" (click)="searchthemau('Vàng')" class="filter-link stext-106 trans-04">
+                  Vàng
+                </button>
+              </li>
+              <li class="p-b-6">
+                <span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
+                  <i class="zmdi zmdi-circle"></i>
+                </span>
+                <button *ngIf="chose_mau=='Tím'" (click)="searchthemau('Tím')"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Tím
+                </button>
+                <button *ngIf="chose_mau!='Tím'" (click)="searchthemau('Tím')" class="filter-link stext-106 trans-04">
+                  Tím
+                </button>
+              </li>
+              <li class="p-b-6">
+                <span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
+                  <i class="zmdi zmdi-circle"></i>
+                </span>
+                <button *ngIf="chose_mau == 'Đỏ'" (click)="searchthemau('Đỏ')"
+                  class="filter-link stext-106 trans-04 filter-link-active">
+                  Đỏ
+                </button>
+                <button *ngIf="chose_mau != 'Đỏ'" (click)="searchthemau('Đỏ')" class="filter-link stext-106 trans-04">
+                  Đỏ
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="col-4 p-r-15 p-b-27">
+            <div class="mtext-102 cl2 p-b-15">
+              Thương hiệu
+            </div>
+            <ul>
+              <li class="p-b-6" *ngFor="let item of list_nhan_hieu">
+                <button (click)="searNhanHieu(item)" [ngClass]="{
+                    'filter-link-active': item.ten === chose_nhan_hieu
+                  }" class="filter-link stext-106 trans-04">
+                  {{ item.ten }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="product-list-wrapper">
+      <div class="row isotope-grid">
+        <div *ngFor="let item of list_product| appFilter: searchText" appHighlight [searchedWord]="searchText"
+          [content]="c" [classToApply]="'font-weight-bold'" [setTitle]="'true'"
+          class="col-sm-6 col-md-4 custom-col-5 p-b-35 isotope-item">
+          <!-- Block2 -->
+          <div class="block2">
+            <div class="block2-pic hov-img0">
+              <img src="https://localhost:44302/Images/list-image-product/{{item.image}}"
+                style="height: 200px;width:180px" alt="IMG-PRODUCT">
+              <a [routerLink]="'/product/'+item.id"
+                class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                Quick View
+              </a>
+            </div>
+            <div class="block2-txt flex-w flex-t p-t-14">
+              <div class="block2-txt-child1 flex-col-l ">
+                <a [routerLink]="'/product/'+item.id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                  {{item.ten}}
+                </a>
+                <span class="stext-105 cl3">
+                  {{item.giaBan|number}} VNĐ
+                </span>
+              </div>
+              <div class="block2-txt-child2 flex-r p-t-3">
+                <a *ngIf="!item.isLike" (click)="like(item.id)"
+                  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                  <img class="icon-heart1 dis-block trans-04" src="../../../assets/images/icons/icon-heart-01.png"
+                    alt="ICON">
+                </a>
+                <a *ngIf="item.isLike" (click)="like(item.id)"
+                  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                  <img class="icon-heart1 dis-block trans-04" src="../../../assets/images/icons/icon-heart-02.png"
+                    alt="ICON">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pagination-wrapper">
+        <nav class="pagination-container">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="goToPage(currentPage - 1)">«</button>
+            </li>
+
+            <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+              [class.active]="currentPage === i + 1">
+              <button class="page-link" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+              </button>
+            </li>
+
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link" (click)="goToPage(currentPage + 1)">»</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Load more
+        <div class="flex-c-m flex-w w-full p-t-45">
+            <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+                Load More
+            </a>
+        </div> -->
+  </div>
+</section>

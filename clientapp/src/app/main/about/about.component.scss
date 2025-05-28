@@ -1,0 +1,17 @@
+.banner {
+    background-image: url(../../../assets/images/banner-for-about&contact.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 10px;
+}
+
+.text-banner h1 {
+    color: #fff;
+    font-size: 56px;
+    text-shadow: 0px 8px 10px rgba(255, 255, 255, 0.685);
+}
