@@ -75,11 +75,11 @@ export const navItems: INavData[] = [
         url:'admin/blogs',
         icon:'cil-chat-bubble'
       },
-      {
-        name:'Trò chuyện',
-        url:'admin/chats',
-        icon:'cil-chat-bubble'
-      },
+      // {
+      //   name:'Trò chuyện',
+      //   url:'admin/chats',
+      //   icon:'cil-chat-bubble'
+      // },
     ]
   },
   {

@@ -10,12 +10,12 @@ import { SelectMonthComponent } from './select-month/select-month.component';
 })
 export class ChartSecondComponent implements OnInit {
   dataSourceBrand: { chart: { caption: string; plottooltext: string; showLegend: string; showPercentValues: string; legendPosition: string; useDataPlotColorForLabels: string; enablemultislicing: string; showlegend: string; theme: string; }; data: { label: string; value: string; }[]; };
-  nam2021: any;
+  nam2025: any;
   errorMessage: any;
   dataThongKe: any;
   soLanXuatHien: any;
   doanhthucaonhat: any;
-  nam2021soluong: any;
+  nam2025soluong: any;
   soLuongTon: any;
   constructor(public service:ChartSecondService,    public dialog: MatDialog,
     public zone: NgZone) {
@@ -45,7 +45,7 @@ export class ChartSecondComponent implements OnInit {
   }
   public dataSourceYear: any = {
     chart: {
-      caption: 'Doanh thu các tháng trong năm 2021',
+      caption: 'Doanh thu các tháng trong năm 2025',
       xAxisName: 'Tháng',
       yAxisName: 'Số tiền thu về',
       numberSuffix: '',
@@ -115,7 +115,7 @@ export class ChartSecondComponent implements OnInit {
     this.getTop10SanPhamLoiNhats()
     this.getSoLanXuatHienTrongDonHang()
     this.getThongKeThang();
-    this.getNam2021doanhso();
+    this.getNam2025doanhso();
     this.getSoLuongTrongNam();
     this.getTopNhanHieu();
     const connection = new signalR.HubConnectionBuilder()
@@ -140,19 +140,19 @@ export class ChartSecondComponent implements OnInit {
       this.getTopNhanHieu()
     })
     connection.on("BroadcastMessage", () => {
-      this.getNam2021doanhso()
+      this.getNam2025doanhso()
     })
     connection.on("BroadcastMessage", () => {
-      this.getNam2021doanhso()
+      this.getNam2025doanhso()
     })
     connection.on("BroadcastMessage", () => {
       this.getSoLuongTrongNam()
     })
   }
-  getNam2021doanhso() {
-    this.service.getNam2021DoanhSo().subscribe(
+  getNam2025doanhso() {
+    this.service.getNam2025DoanhSo().subscribe(
       result => {
-        this.nam2021 = result as any
+        this.nam2025 = result as any
       },
       error => {
         this.errorMessage = <any>error
@@ -211,9 +211,9 @@ export class ChartSecondComponent implements OnInit {
   }
   ///Quan trong
   getSoLuongTrongNam() {
-    this.service.getNam2021SoLuong().subscribe(
+    this.service.getNam2025SoLuong().subscribe(
       result => {
-        this.nam2021soluong = result as any
+        this.nam2025soluong = result as any
       },
       error => {
         this.errorMessage = <any>error

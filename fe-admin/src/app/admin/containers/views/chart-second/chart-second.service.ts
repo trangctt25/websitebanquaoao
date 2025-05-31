@@ -10,10 +10,10 @@ export class ChartSecondService {
   getKhachHangMuaNhieuNhat():Observable<any>{
     return this.http.get<any>(environment.URL_API+"ThongKeSoLuongs/getkhachhangmuanhieunhat") 
   }
-  getNam2021DoanhSo():Observable<any>{
-    return this.http.get<any>(environment.URL_API+"ThongKeSoLuongs/nam2021")
+  getNam2025DoanhSo():Observable<any>{
+    return this.http.get<any>(environment.URL_API+"ThongKeSoLuongs/nam2025")
   }
-  getNam2021SoLuong():Observable<any>{
+  getNam2025SoLuong():Observable<any>{
     return this.http.get<any>(environment.URL_API+"ThongKeSoLuongs/Soluongsanphambanratrongnam")
   }
   getSoLuongTon():Observable<any>{
@@ -36,7 +36,7 @@ export class ChartSecondService {
      return this.http.get<any>(environment.URL_API+"ThongKeBieuDos/topsanphamloinhattop") 
   }
   getTopNhanHieuDoanhThu():Observable<any>{
-    return this.http.get<any>(environment.URL_API+"ThongKeBieuDos/topnhanhieubanchaynhattrongnam2021")
+    return this.http.get<any>(environment.URL_API+"ThongKeBieuDos/topnhanhieubanchaynhattrongnam2025")
   }
   dataThongKeNgay: any
   public dataSourceNgay: any = {

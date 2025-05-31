@@ -1,39 +1,68 @@
 <form [formGroup]="newFormGroup" (ngSubmit)="onSubmit(newFormGroup.value)">
-    <div class="container" style="width: 30vw;">
-        <button class="btn-dialog-close" mat-stroked-button [mat-dialog-close]="true" tabIndex="-1" style="float: right;"><mat-icon>clear</mat-icon></button>
-        <br>
-        <div class="form-group">
-            <label for="MaMau">Tên màu</label>
-            <select class="form-control" formControlName="MaMau" [(ngModel)]="this.service.mausac.maMau">
-                <option value="Đen">Đen</option>
-                <option value="Trắng">Trắng</option>
-                <option value="Vàng">Vàng</option>
-                <option value="Tím">Tím</option>
-                <option value="Đỏ">Đỏ</option>
-            </select>
-            <div *ngIf="MaMau.invalid && (MaMau.dirty || MaMau.touched)" class="alert alert-danger">
-                <div *ngIf="MaMau.errors.required">
-                    Mã màu không được bỏ trống
-                </div>
-                <div *ngIf="MaMau.errors.minlength">
-                    Tên không được dưới 2 kí tự
-                </div>
-            </div>
+  <div class="container" style="width: 30vw;">
+    <button class="btn-dialog-close" mat-stroked-button [mat-dialog-close]="true" tabIndex="-1" style="float: right;"><mat-icon>clear</mat-icon></button>
+    <br>
+    <div class="form-group">
+      <label for="MaMau">Tên màu</label>
+      <select class="form-control" formControlName="MaMau" [(ngModel)]="this.service.mausac.maMau">
+        <option value="Đen">Đen</option>
+        <option value="Trắng">Trắng</option>
+        <option value="Vàng">Vàng</option>
+        <option value="Tím">Tím</option>
+        <option value="Đỏ">Đỏ</option>
+        <option value="Hồng pastel">Hồng pastel</option>
+        <option value="Xanh pastel">Xanh pastel</option>
+        <option value="Ghi sáng">Ghi sáng</option>
+        <option value="Xám">Xám</option>
+        <option value="Nâu nhạt">Nâu nhạt</option>
+        <option value="Nâu đậm">Nâu đậm</option>
+        <option value="Beige (Bee)">Beige (Bee)</option>
+        <option value="Xanh Lam">Xanh Lam</option>
+        <option value="Vàng chanh">Vàng chanh</option>
+        <option value="Vàng đậm">Vàng đậm</option>
+        <option value="Vàng">Vàng</option>
+        <option value="Xanh navy">Xanh navy</option>
+        <option value="Xanh mint">Xanh mint</option>
+        <option value="Đỏ đô">Đỏ đô</option>
+        <option value="Xanh rêu">Xanh rêu</option>
+        <option value="Đen">Đen</option>
+        <option value="Trắng">Trắng</option>
+        <option value="jean sáng">jean sáng</option>
+        <option value="jean">jean</option>
+        <option value="jean tối">jean tối</option>
+        <option value="bạc">bạc</option>
+        <option value="Tím pastel">Tím pastel</option>
+        <option value="Tím">Tím</option>
+        <option value="Tím than">Tím than</option>
+        <option value="Cam pastel">Cam pastel</option>
+        <option value="Cam">Cam</option>
+        <option value="Cam đất">Cam đất</option>
+        <option value="Đỏ pastel">Đỏ pastel</option>
+        <option value="Đỏ Thẫm">Đỏ Thẫm</option>
+      </select>
+      <div *ngIf="MaMau.invalid && (MaMau.dirty || MaMau.touched)" class="alert alert-danger">
+        <div *ngIf="MaMau.errors.required">
+          Mã màu không được bỏ trống
         </div>
-        <div class="form-group">
-            <span class="label label-default">Tên loại</span>
-            <select class="form-control" [(ngModel)]="service.mausac.id_Loai" formControlName="Id_Loai">
-                <option  *ngFor="let category of this.categories"
-                    [value]="category.id">{{category.ten}}</option>
-            </select>
-            <div *ngIf="Id_Loai.invalid && (Id_Loai.dirty || Id_Loai.touched)" class="alert alert-danger">
-                <div *ngIf="Id_Loai.errors.required">
-                    Loại không được bỏ trống
-                </div>
-            </div>
+        <div *ngIf="MaMau.errors.minlength">
+          Tên không được dưới 2 kí tự
         </div>
-        <div class="form-group" style="justify-content:center;display: flex;">
-            <button type="submit" class="btn btn-primary" [mat-dialog-close]="true" [disabled]="this.newFormGroup.invalid">Submit</button>
-        </div>
+      </div>
     </div>
+    <div class="form-group">
+      <span class="label label-default">Tên loại</span>
+      <select class="form-control" [(ngModel)]="service.mausac.id_Loai" formControlName="Id_Loai">
+        <option *ngFor="let category of this.categories"
+          [value]="category.id">{{category.ten}}</option>
+      </select>
+      <div *ngIf="Id_Loai.invalid && (Id_Loai.dirty || Id_Loai.touched)" class="alert alert-danger">
+        <div *ngIf="Id_Loai.errors.required">
+          Loại không được bỏ trống
+        </div>
+      </div>
+    </div>
+    <div class="form-group" style="justify-content:center;display: flex;">
+      <button type="submit" class="btn btn-primary" [mat-dialog-close]="true" [disabled]="this.newFormGroup.invalid">Submit</button>
+    </div>
+  </div>
 </form>

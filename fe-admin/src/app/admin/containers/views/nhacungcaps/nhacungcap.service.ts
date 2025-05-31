@@ -32,6 +32,6 @@ export class NhaCungCapService{
     id : number = 0
     ten: string
     sdt : string 
-    thongTin:string="	Chuyên cung cấp quần áo giày dép các loại, rất hân hạnh được phục vụ quý khách"
+    thongTin:string
     diaChi:string
   }
