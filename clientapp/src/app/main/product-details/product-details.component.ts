@@ -111,12 +111,12 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
       });
     });
     /*---------------------------------------------*/
-    $('.js-addcart-detail').each(function () {
-      var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-      $(this).on('click', function () {
-        Swal.fire(nameProduct, "đã được thêm vào giỏ hàng !", "success");
-      });
-    });
+    // $('.js-addcart-detail').each(function () {
+    //   var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+    //   $(this).on('click', function () {
+    //     Swal.fire(nameProduct, "đã được thêm vào giỏ hàng !", "success");
+    //   });
+    // });
     $('.wrap-slick3').each(function () {
       $(this).find('.slick3').slick({
         slidesToShow: 1,
@@ -208,6 +208,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
 
   addToCard(product) {
     if (!this.userService.checkLogin()) {
+      return Swal.fire("Thông báo", "Bạn cần đăng nhập để thực hiện chức năng này", "warning");
     }
     else {
       var SanPhamBienThe = this.list_san_pham_bien_the.filter(d => d.tenMau == this.selectMau && d.tenSize == this.selectSize)[0];
@@ -224,23 +225,9 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
         }
       ).subscribe(resp => {
         this.cartService.addToCart(product);
+        var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+        Swal.fire(nameProduct, "đã được thêm vào giỏ hàng !", "success");
       });
     }
   }
-  // addToCard(){
-  //   var SanPhamBienThe = this.list_san_pham_bien_the.filter(d=>d.tenMau==this.selectMau&&d.tenSize==this.selectSize)[0];
-  //   const clicks = localStorage.getItem('idUser');
-  //   var SanPhamId=SanPhamBienThe.id;
-  //   console.log(SanPhamId);
-  //   this.http.post(environment.URL_API+"Carts"
-  //    ,{
-  //       Id_SanPhamBienThe:SanPhamId,
-  //      SanPhamId:this.product.id,
-  //      Mau:this.selectMau,
-  //      Size:this.selectSize,
-  //      UserID:clicks,
-  //    }
-  //   ).subscribe(resp => {
-  //   });
-  // }
 }

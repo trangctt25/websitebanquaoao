@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-info-user',
   templateUrl: './info-user.component.html',
@@ -18,5 +19,15 @@ export class InfoUserComponent implements OnInit {
     );
    }
   ngOnInit(): void {
+  }
+  updateUser() {
+    this.http.put(environment.URL_API+"Auth/updateCustomer", this.user).subscribe(
+      res => {
+         Swal.fire("Cập nhật thành công.", '', 'success');
+      },
+      error => {
+         Swal.fire("Cập nhật không thành công.", '', 'error');
+      }
+    );
   }
 }

@@ -141,13 +141,15 @@ export class CheckoutComponent implements OnInit {
     }
     else {
       const clicks = localStorage.getItem('idUser');
+      debugger
       this.http.post(environment.URL_API + "hoadons/", {
         Tinh: this.Tinh,
         Huyen: this.Huyen,
         Xa: this.Xa,
         DiaChi: this.DiaChi,
         TongTien: this.tongThanhToan - 25000,
-        Id_User: clicks
+        Id_User: clicks,
+        so_luong: this.list_item.length,
       }).subscribe(
         res => {
           Swal.fire("Đặt hàng thành công.", '', 'success').then(function () {

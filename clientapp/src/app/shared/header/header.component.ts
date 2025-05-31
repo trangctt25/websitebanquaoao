@@ -103,6 +103,7 @@ export class HeaderComponent implements OnInit {
       res => {
         this.user = undefined;
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('idUser');
         localStorage.removeItem('products');
         localStorage.removeItem('idUser');
         window.location.href = "/login";
@@ -110,6 +111,6 @@ export class HeaderComponent implements OnInit {
       error => {
       }
     );
-    
+
   }
 }
