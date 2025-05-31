@@ -19,5 +19,6 @@ namespace API.Dtos
         public string LastName { get; set; }
         public string Location { get; set; }
         public string Quyen { get; set; }
+        public string Id { get; set; }
     }
 }

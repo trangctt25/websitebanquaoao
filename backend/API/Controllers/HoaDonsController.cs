@@ -111,7 +111,7 @@ namespace API.Controllers
             return await _context.MaGiamGias.ToListAsync();
         }
         [HttpPost]
-        public async Task<ActionResult<HoaDon>> TaoHoaDon(HoaDon hd)
+        public async Task<ActionResult<HoaDon>> TaoHoaDon(HoaDons hd)
         {
             HoaDon hoaDon = new HoaDon()
             {

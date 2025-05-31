@@ -100,11 +100,11 @@ namespace API.Controllers
             var tenSP = await query.GroupBy(x => x.TenSP).Select(x => x.FirstOrDefault()).FirstOrDefaultAsync();
             return tenSP;
         }
-        //Hien tai nam 2021 da ban duoc so don vi tien te la
-        [HttpGet("nam2021")]
-        public async Task<ActionResult<Nam2021SoTongTien>> GetNam2021TongTien()
+        //Hien tai nam 2025 da ban duoc so don vi tien te la
+        [HttpGet("nam2025")]
+        public async Task<ActionResult<Nam2025SoTongTien>> GetNam2025TongTien()
         {
-            return await _connector.GetNam2021TongTien();
+            return await _connector.GetNam2025TongTien();
         }
         [HttpGet("soluongton")]
         public async Task<ActionResult<int>> GetSoLuongTonTrongKho()
@@ -133,10 +133,10 @@ namespace API.Controllers
                             };
                 var list = await query
                     .ToListAsync();
-                var nam2021 = list.GroupBy(x => x.Nam)
+                var nam2025 = list.GroupBy(x => x.Nam)
                     .Select(x => x.FirstOrDefault())
                     .FirstOrDefault();
-                return nam2021;
+                return nam2025;
             }
             catch(Exception ex)
             {

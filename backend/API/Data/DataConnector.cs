@@ -12,11 +12,11 @@ namespace API.Data
     {
         Task<List<TenSPSoLanXuatHienTrongDonHang>> GetSoLanXuatHienTrongDonHang();
         Task<List<TenSanPhamDoanhSo>> Top10SanPhamLoiNhats();
-        Task<List<NhanHieuBanChayNhatTrongNam2021>> GetNhanHieuBanChayNhatTrongNam2021();
+        Task<List<NhanHieuBanChayNhatTrongNam2025>> GetNhanHieuBanChayNhatTrongNam2025();
         Task<List<DataSetBanRaTonKho>> DataDataSetBanRaTonKho();
         Task<List<NhaCungCapSoLuong>> GetNhaCungCapSoLuongs();
         Task<List<NhaCungCapTongTien>> GetDoanhSoBans();
-        Task<Nam2021SoTongTien> GetNam2021TongTien();
+        Task<Nam2025SoTongTien> GetNam2025TongTien();
         Task<MotHoaDon> HoaDonDetailAsync(int id);
         Task<MotHoaDon> GetOneOrder(int id);
     }
@@ -105,7 +105,7 @@ namespace API.Data
             }
             return tenspdss;
         }
-        public async Task<List<NhanHieuBanChayNhatTrongNam2021>> GetNhanHieuBanChayNhatTrongNam2021()
+        public async Task<List<NhanHieuBanChayNhatTrongNam2025>> GetNhanHieuBanChayNhatTrongNam2025()
         {
             string sql = @"select top(10) NhanHieus.Ten,sum(ChiTietHoaDons.Soluong) as'soluong'
                             from NhanHieus
@@ -117,14 +117,14 @@ namespace API.Data
                             on ChiTietHoaDons.Id_SanPhamBienThe = SanPhamBienThes.Id
                             inner join HoaDons
                             on HoaDons.Id = ChiTietHoaDons.Id_HoaDon
-                            where DATEPART( YYYY,HoaDons.NgayTao)='2021' and HoaDons.TrangThai = 2
+                            where DATEPART( YYYY,HoaDons.NgayTao)='2025' and HoaDons.TrangThai = 2
                             group by NhanHieus.Ten
                         ";
             SqlConnection cnn;
             cnn = new SqlConnection(_context.Database.GetConnectionString());
             SqlDataReader reader;
             SqlCommand cmd;
-            List<NhanHieuBanChayNhatTrongNam2021> listNH = new List<NhanHieuBanChayNhatTrongNam2021>();
+            List<NhanHieuBanChayNhatTrongNam2025> listNH = new List<NhanHieuBanChayNhatTrongNam2025>();
             await cnn.OpenAsync();
             cmd = new SqlCommand(sql, cnn);
             reader = await cmd.ExecuteReaderAsync();
@@ -132,7 +132,7 @@ namespace API.Data
             {
                 while (await reader.ReadAsync())
                 {
-                    listNH.Add(new NhanHieuBanChayNhatTrongNam2021()
+                    listNH.Add(new NhanHieuBanChayNhatTrongNam2025()
                     {
                         Ten = (string)reader["Ten"],
                         SoLuong = (int)reader["soluong"]
@@ -250,18 +250,18 @@ namespace API.Data
             await cnn.CloseAsync();
             return list;
         }
-        public async Task<Nam2021SoTongTien> GetNam2021TongTien()
+        public async Task<Nam2025SoTongTien> GetNam2025TongTien()
         {
             string sql = @"select DATEPART( YYYY,HoaDons.NgayTao) as 'Nam', sum(HoaDons.TongTien) as'Tong tien trong nam'
                             from HoaDons
-                            where DATEPART( YYYY,HoaDons.NgayTao)='2021' and HoaDons.TrangThai = 2
+                            where DATEPART( YYYY,HoaDons.NgayTao)='2025' and HoaDons.TrangThai = 2
                             group by DATEPART( YYYY,HoaDons.NgayTao)
                         ";
             SqlConnection cnn;
             cnn = new SqlConnection(_context.Database.GetConnectionString());
             SqlDataReader reader;
             SqlCommand cmd;
-            var nam2021 = new Nam2021SoTongTien();
+            var nam2025 = new Nam2025SoTongTien();
             await cnn.OpenAsync();
             cmd = new SqlCommand(sql, cnn);
             reader = await cmd.ExecuteReaderAsync();
@@ -269,12 +269,12 @@ namespace API.Data
             {
                 while (await reader.ReadAsync())
                 {
-                    nam2021.Nam = (int)reader["Nam"];
-                    nam2021.TongTien = (decimal)reader["Tong tien trong nam"];
+                    nam2025.Nam = (int)reader["Nam"];
+                    nam2025.TongTien = (decimal)reader["Tong tien trong nam"];
                 }
             }
             cnn.Close();
-            return nam2021;
+            return nam2025;
         }
         public async Task<MotHoaDon> HoaDonDetailAsync(int id)
         {

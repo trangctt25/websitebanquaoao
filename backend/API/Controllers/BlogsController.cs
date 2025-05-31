@@ -80,11 +80,11 @@ namespace API.Controllers
             {
                 for (int i = 0; i < file.Length; i++)
                 {
-                    if (file[i].Length > 0 && file[i].Length < 5120)
+                    if (file[i].Length > 0 && file[i].Length < 5242880)
                     {
                         listImage.Add(new ImageBlog()
                         {
-                            ImageName =await FileHelper.UploadImageAndReturnFileNameAsync(null,upload,"blog", (IFormFile[])upload.files,i),
+                            ImageName =await FileHelper.UploadImageAndReturnFileNameAsync(null,upload,"blog", upload.files.ToArray(), i),
                             FkBlogId = blog.Id,
                         });
                     }
@@ -129,12 +129,12 @@ namespace API.Controllers
             {
                 for (int i = 0; i < file.Length; i++)
                 {
-                    if (file[i].Length > 0 && file[i].Length < 5120)
+                    if (file[i].Length > 0 && file[i].Length < 5242880)
                     {
                         ImageBlog imageBlog = new ImageBlog();
                         _context.ImageBlogs.Add(imageBlog);
                         await _context.SaveChangesAsync();
-                        imageBlog.ImageName = await FileHelper.UploadImageAndReturnFileNameAsync(null, upload, "blog", (IFormFile[])upload.files, i);
+                        imageBlog.ImageName = await FileHelper.UploadImageAndReturnFileNameAsync(null, upload, "blog", upload.files.ToArray(), i);
                         imageBlog.FkBlogId = blog.Id;
                         _context.ImageBlogs.Update(imageBlog);
                         await _context.SaveChangesAsync();

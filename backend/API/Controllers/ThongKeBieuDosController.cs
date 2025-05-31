@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpGet("topthongkethang")]
         public async Task<ActionResult<IEnumerable<ThangRevenue>>> GetDoanhSoThangasync()
         {
-            var sells = await _context.HoaDons.Where(s => s.TrangThai == 2)
+            var sells = await _context.HoaDons.Where(s => s.TrangThai == 2 && s.NgayTao.Year == 2025)
                 .GroupBy(a => a.NgayTao.Date.Month)
                 .Select(a => new ThangRevenue { Revenues = a.Sum(b => b.TongTien), Month = a.Key.ToString()  })
                 .OrderBy(a => a.Revenues)
@@ -45,7 +45,7 @@ namespace API.Controllers
         [HttpPost("topthongkengaytheothang")]
         public async Task<ActionResult<IEnumerable<NgayRevenue>>> GetDoanhSoNgayTheoThangasync([FromForm]string month)
         {
-            var sells = await _context.HoaDons.Where(s=>s.TrangThai==2)
+            var sells = await _context.HoaDons.Where(s=>s.TrangThai==2 && s.NgayTao.Year == 2025)
                   .GroupBy(a => a.NgayTao.Date)
                   .Select(a => new NgayRevenue { Revenues = a.Sum(b => b.TongTien), Ngay = a.Key.Date })
                   .OrderBy(a => a.Revenues)
@@ -66,10 +66,10 @@ namespace API.Controllers
            return await _connector.Top10SanPhamLoiNhats();
         }
         //Tong so luong ban ra trong nam
-        [HttpGet("topnhanhieubanchaynhattrongnam2021")]
-        public async Task<ActionResult<IEnumerable<NhanHieuBanChayNhatTrongNam2021>>> GetNhanHieuBanChayNhatTrongNam2021()
+        [HttpGet("topnhanhieubanchaynhattrongnam2025")]
+        public async Task<ActionResult<IEnumerable<NhanHieuBanChayNhatTrongNam2025>>> GetNhanHieuBanChayNhatTrongNam2025()
         {
-            return await _connector.GetNhanHieuBanChayNhatTrongNam2021();
+            return await _connector.GetNhanHieuBanChayNhatTrongNam2025();
         }
         //$sidebar-nav-link-active-bg; //131
         //Bien the dat doanh thu cao nhat

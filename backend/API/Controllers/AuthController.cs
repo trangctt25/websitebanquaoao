@@ -150,5 +150,44 @@ namespace API.Controllers
             appUser = await _context.AppUsers.FindAsync(id);
             return appUser;
         }
+        [HttpPut("updateCustomer")]
+        public async Task<IActionResult> UpdateCustomer([FromBody] RegistrationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Tìm người dùng theo Email
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            // Cập nhật thông tin người dùng
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.SDT;
+            user.DiaChi = model.DiaChi;
+            user.Email = model.Email;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            }
+
+            // Cập nhật bảng JobSeeker nếu có
+            var jobSeeker = await _context.JobSeekers.FirstOrDefaultAsync(j => j.Id_Identity == user.Id);
+            if (jobSeeker != null)
+            {
+                jobSeeker.Location = model.Location;
+                _context.JobSeekers.Update(jobSeeker);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "User updated successfully" });
+        }
     }
 }
