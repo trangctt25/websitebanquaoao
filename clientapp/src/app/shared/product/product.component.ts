@@ -135,7 +135,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
   // }
 
   searchTheoGia() {
-    
+
   }
 
   searchthemau(chose) {
@@ -272,6 +272,17 @@ export class ProductComponent implements OnInit, AfterViewInit {
         }
       });
     });
+  }
+  clearFilter() {
+    this.chose_tab = null;
+    this.chose_gia = null;
+    this.chose_mau = null;
+    this.chose_nhan_hieu = null;
+    this.thap = null;
+    this.cao = null;
+    this.currentPage = 1; // Reset lại về trang 1
+    this.loadProducts(this.currentPage);
+
   }
 
   filterByCategory(category) {
