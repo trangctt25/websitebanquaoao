@@ -35,5 +35,7 @@ namespace API.Dtos
         public int? GiaSanPhams { get; set; }
         public int? SanPhamThietKes { get; set; }
         public int? SanPham_SanPhamThietKes { get; set; }
+
+        public string ImageList { get; set; }
     }
 }

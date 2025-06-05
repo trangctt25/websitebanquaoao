@@ -107,18 +107,33 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSanPhamBienTh(int id)
         {
-            SanPhamBienThe spbt;
-            spbt = await _context.SanPhamBienThes.FindAsync(id);
-            _context.SanPhamBienThes.Remove(spbt);
-            Notification notification = new Notification()
+            try
             {
-                //TenSanPham = spbt.ImagePath,
-                TranType = "Delete",
-            };
-            _context.Notifications.Add(notification);
-            await _context.SaveChangesAsync();
-            await _hubContext.Clients.All.BroadcastMessage();
-            return Ok();
+                var spbt = await _context.SanPhamBienThes.FindAsync(id);
+                if (spbt == null)
+                {
+                    return NotFound(new { message = $"Không tìm thấy sản phẩm biến thể với ID = {id}" });
+                }
+
+                _context.SanPhamBienThes.Remove(spbt);
+
+                var notification = new Notification()
+                {
+                    TranType = "Delete",
+                };
+                _context.Notifications.Add(notification);
+
+                await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.BroadcastMessage();
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+            
         }
         private bool GiaSanPhamExists(int id)
         {

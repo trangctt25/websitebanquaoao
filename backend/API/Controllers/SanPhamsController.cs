@@ -167,6 +167,7 @@ namespace API.Controllers
                        TenLoai = _context.Loais.Where(d => d.Id == s.Id_Loai).Select(d => d.Ten).FirstOrDefault(),
                        TenNhanHieu = _context.NhanHieus.Where(d => d.Id == s.Id_NhanHieu).Select(d => d.Ten).FirstOrDefault(),
                        Image = _context.ImageSanPhams.Where(q => q.IdSanPham == s.Id).Select(q => q.ImageName).FirstOrDefault(),
+                       ImageList = string.Join(',' , _context.ImageSanPhams.Where(q => q.IdSanPham == s.Id).Select(q => q.ImageName).ToList()),
                    }).OrderByDescending(e => e.Id).ToListAsync();
             return list;
         }

@@ -168,7 +168,7 @@ namespace API.Controllers
             // Cập nhật thông tin người dùng
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.PhoneNumber = model.SDT;
+            user.SDT = model.SDT;
             user.DiaChi = model.DiaChi;
             user.Email = model.Email;
 

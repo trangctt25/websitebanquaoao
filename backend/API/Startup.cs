@@ -106,7 +106,13 @@ namespace API
                 app.UseHsts();
             }
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:4200");
+                }
+            });
             app.UseHttpsRedirection();
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
             var tokenValidationParameters = new TokenValidationParameters
