@@ -38,6 +38,6 @@ export class BlogService {
 export class Blog{
   id:number = 0
   tieude:string
-  hinh:string
+  image:string
   noidung:string
 }

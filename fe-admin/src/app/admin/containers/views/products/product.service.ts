@@ -62,4 +62,6 @@ export class Product {
   tenLoai: string
   soLuongLike:number
   soLuongComment:number
+  image: string
+  imageList: string
 }

@@ -47,7 +47,7 @@ export class TaoPhieuNhapComponent implements OnInit {
         [
           Validators.required
         ]),
-      SoLuongNhap: new FormControl(100,
+      SoLuongNhap: new FormControl(20,
         [
           Validators.required,
         ]),
@@ -121,7 +121,7 @@ idncc:any
   }
   phieunhappost:any
   onSubmit=(data) =>{
-    this.idUser = localStorage.getItem("idUser")  
+    this.idUser = localStorage.getItem("idUser")
     this.service.phieunhappost.nguoiLapPhieu=this.idUser
     this.service.phieunhappost.ghiChu=data.GhiChu
     this.service.phieunhappost.tongTien=this.tongTien()

@@ -51,7 +51,7 @@
             Giá nhập không được trên 10 kí tự
         </div>
     </div>
-    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p" [color]="accent" style="width: 100%;">
+    <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100-p" [color]="accent" style="width: 100%;">
         <mat-label>Khuyến mãi</mat-label>
         <input matInput placeholder="Khuyến mãi" formControlName="KhuyenMai" type="number"
             [(ngModel)]="service.product.khuyenMai" required>
@@ -60,7 +60,7 @@
         <div *ngIf="KhuyenMai.errors.required">
             Khuyến mãi sản phẩm không được bỏ trống
         </div>
-    </div>
+    </div> -->
     <div class="form-group">
         <span class="label label-default">Giới tính</span>
         <select class="form-control" [(ngModel)]="service.product.gioiTinh" formControlName="GioiTinh" required>

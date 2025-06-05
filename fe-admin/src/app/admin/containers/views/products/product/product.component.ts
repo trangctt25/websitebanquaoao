@@ -22,25 +22,7 @@ export class ProductComponent implements OnInit {
   //Begin Review multile file before upload
   public newForm: FormGroup;
   urls = new Array<string>();
-  nhacungcaps: any[]=[];
-  gopHam(event) {
-    this.detectFiles(event)
-    this.onSelectFile(event)
-  }
-  detectFiles(event) {
-    this.urls = [];
-    let files = event.target.files;
-    for (let file of files) {
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.urls.push(e.target.result);
-      }
-      reader.readAsDataURL(file);
-    }
-  }
-  onSelectFile(fileInput: any) {
-    this.selectedFile = <FileList>fileInput.target.files;
-  }
+  nhacungcaps: any[] = [];
   //End Review multile file before upload
   public Editor = ClassicEditor;
   selectedFile: FileList;
@@ -54,7 +36,7 @@ export class ProductComponent implements OnInit {
     public serviceToast: ToastServiceService,
     public serviceCategory: CategoryService,
     public serviceBrand: BrandService,
-    public serviceNhaCungCap:NhaCungCapService) {
+    public serviceNhaCungCap: NhaCungCapService) {
   }
   onSelectedList() {
     this.router.navigate(['admin/products']);
@@ -72,9 +54,30 @@ export class ProductComponent implements OnInit {
   get Id_NhaCungCap() { return this.newForm.get('Id_NhaCungCap'); }
   get TrangThaiSanPham() { return this.newForm.get('TrangThaiSanPham'); }
   get TrangThaiHoatDong() { return this.newForm.get('TrangThaiHoatDong'); }
-  get GioiTinh(){return this.newForm.get('GioiTinh')}
+  get GioiTinh() { return this.newForm.get('GioiTinh') }
+
   ngOnInit(): void {
     console.log(this.service.product)
+    if (this.service.product.id) {
+      const imageNames = this.service.product.imageList ? this.service.product.imageList.split(",") : [];
+
+      const filePromises = imageNames.map(name => {
+        const url = 'https://localhost:44302/Images/list-image-product/' + name;
+        this.urls.push(url); // dùng để hiển thị ảnh mặc định
+
+        return fetch(url)
+          .then(res => res.blob())
+          .then(blob => new File([blob], name, { type: blob.type }));
+      });
+
+      Promise.all(filePromises)
+        .then(files => {
+          const fileList = this.arrayToFileList(files);
+          this.selectedFile = fileList;
+        })
+        .catch(err => console.error('Lỗi load ảnh mặc định:', err));
+    }
+
     this.serviceCategory.get().subscribe(
       data => {
         Object.assign(this.categories, data)
@@ -88,7 +91,7 @@ export class ProductComponent implements OnInit {
     this.serviceNhaCungCap.gethttp().subscribe(
       data => {
         Object.assign(this.nhacungcaps, data)
-        console.log("nha cung cap",this.nhacungcaps);
+        console.log("nha cung cap", this.nhacungcaps);
       }
     )
     this.newForm = new FormGroup({
@@ -107,7 +110,7 @@ export class ProductComponent implements OnInit {
         Validators.min(3),
         Validators.max(100000000000),
       ]),
-      KhuyenMai: new FormControl( this.service.product.khuyenMai,[
+      KhuyenMai: new FormControl(this.service.product.khuyenMai, [
         Validators.required,
         Validators.min(0),
         Validators.max(50000000000),
@@ -132,10 +135,10 @@ export class ProductComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(15),
       ]),
-      Id_Loai: new FormControl( null, [
+      Id_Loai: new FormControl(null, [
         Validators.required,
       ]),
-      Id_NhaCungCap: new FormControl( null, [
+      Id_NhaCungCap: new FormControl(null, [
         Validators.required,
       ]),
       Id_NhanHieu: new FormControl(null, [
@@ -152,6 +155,32 @@ export class ProductComponent implements OnInit {
       ]),
     });
   }
+
+  arrayToFileList(files: File[]): FileList {
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    return dataTransfer.files;
+  }
+
+  gopHam(event) {
+    this.detectFiles(event)
+    this.onSelectFile(event)
+  }
+  detectFiles(event) {
+    this.urls = [];
+    let files = event.target.files;
+    for (let file of files) {
+      let reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.urls.push(e.target.result);
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+  onSelectFile(fileInput: any) {
+    this.selectedFile = <FileList>fileInput.target.files;
+  }
+
   clearForm() {
     this.newForm.reset();
   }
@@ -169,7 +198,7 @@ export class ProductComponent implements OnInit {
       form.append('HuongDan', data.HuongDan);
       form.append('ThanhPhan', data.ThanhPhan);
       form.append('Tag', data.Tag);
-      form.append('GioiTinh',data.GioiTinh)
+      form.append('GioiTinh', data.GioiTinh)
       form.append('Id_Loai', data.Id_Loai);
       form.append('Id_NhanHieu', data.Id_NhanHieu);
       form.append('Id_NhaCungCap', data.Id_NhaCungCap);
@@ -197,7 +226,7 @@ export class ProductComponent implements OnInit {
       form.append('MoTa', data.MoTa);
       form.append('GiaBan', data.GiaBan);
       form.append('GiaNhap', data.GiaNhap);
-      form.append('GioiTinh',data.GioiTinh)
+      form.append('GioiTinh', data.GioiTinh)
       form.append('HuongDan', data.HuongDan);
       form.append('ThanhPhan', data.ThanhPhan);
       form.append('Tag', data.Tag);
@@ -231,114 +260,121 @@ export class ProductComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-  
+
   /* DATA SAN PHAM */
-  TenSanPhamArray:any = [
-    {value: 'Áo ba lỗ', viewValue: 'Áo ba lỗ'},
-    {value: 'Áo thun trơn', viewValue: 'Áo thun trơn'},
-    {value: 'Áo khoác bò ', viewValue: 'Áo khoác bò'},
-    {value: 'Quần short', viewValue: 'Quần short'},
-    {value: 'Quần đùi', viewValue: 'Quần đùi'},
-    {value: 'Quần kaki ', viewValue: 'Quần kaki'},
-    {value: 'Quần baggy', viewValue: 'Quần baggy'},
-    {value: 'Áo Polo', viewValue: 'Áo Polo'},
-    {value: 'Áo FEAER ', viewValue: 'Áo FEAER'},
-    {value: 'Áo sơ mi', viewValue: 'Áo sơ mi'},
-    {value: 'Áo Sơ Mi Nam Đũi Kẻ Sọc Caro ', viewValue: 'Áo Sơ Mi Nam Đũi Kẻ Sọc Caro'},
-    {value: 'Áo phông trơn unisex nam', viewValue: 'Áo phông trơn unisex nam'},
-    {value: 'Áo Thun Nam SADBOIZ', viewValue: 'Áo Thun Nam SADBOIZ'},
-    {value: 'Áo thun HOTTREND', viewValue: 'Áo thun HOTTREND'},
-    {value: 'Áo Thun Nam Thể Thao', viewValue: 'Áo Thun Nam Thể Thao'},
-    {value: 'Áo thun Highclub Basic Tee', viewValue: 'Áo thun Highclub Basic Tee'},
-    {value: 'Áo SIGNATURE', viewValue: 'Áo SIGNATURE'},
-    {value: 'Áo thun Bad Habits ROCKER', viewValue: 'Áo thun Bad Habits ROCKER'},
-    {value: 'Áo sơ mi trơn big size LADOS ', viewValue: 'Áo sơ mi trơn big size LADOS '},
-    {value: 'Áo Thun Missout BUNNY&BEAR TEE', viewValue: 'Áo Thun Missout BUNNY&BEAR TEE'},
-    {value: 'GIÀY THỂ THAO NAM', viewValue: 'GIÀY THỂ THAO NAM'},
-    {value: 'Giày thể thao nữ CV classic', viewValue: 'Giày thể thao nữ CV classic'},
-    {value: 'Giày thể thao nữ Ulzzang', viewValue: 'Giày thể thao nữ Ulzzang'},
-    {value: 'GIÀY NỮ AIR TRẮNG', viewValue: 'GIÀY NỮ AIR TRẮNG'},
-    {value: 'Giày 𝐌𝐋𝐁 boston bản trung', viewValue: 'Giày 𝐌𝐋𝐁 boston bản trung'},
-    {value: 'Giày AF1 trắng', viewValue: 'Giày AF1 trắng'},
-    {value: 'Áo sơ mi tay ngắn nam nữ', viewValue: 'Áo sơ mi tay ngắn nam nữ'},
-    {value: ' Áo Sơmi nhung Tăm vintage', viewValue: 'Áo Sơmi nhung Tăm vintage'},
-    {value: 'Đồng Hồ Nam PAGINI PA9966 ', viewValue: 'Đồng Hồ Nam PAGINI PA9966 '},
-    {value: 'Đồng Hồ Nữ Julius Hàn Quốc', viewValue: 'Đồng Hồ Nữ Julius Hàn Quốc'},
-    {value: 'Đồng hồ WR unisex dây hơp kim CS1', viewValue: 'Đồng hồ WR unisex dây hơp kim CS1'},
-    {value: 'Đồng hồ Nữ Army', viewValue: 'Đồng hồ Nữ Army'},
-    {value: 'Đồng Hồ Nam Crnaira Japan C3079', viewValue: 'Đồng Hồ Nam Crnaira Japan C3079'},
-    {value: 'Giây lưng thắt lưng nam ', viewValue: 'Giây lưng thắt lưng nam '},
-    {value: 'Dây Nịt Nam Mặt GG', viewValue: 'Dây Nịt Nam Mặt GG'},
-    {value: 'Thắt Lưng Da Bò SÁP', viewValue: 'Thắt Lưng Da Bò SÁP'},
+  TenSanPhamArray: any = [
+    { value: 'Áo ba lỗ', viewValue: 'Áo ba lỗ' },
+    { value: 'Áo thun trơn', viewValue: 'Áo thun trơn' },
+    { value: 'Áo khoác bò ', viewValue: 'Áo khoác bò' },
+    { value: 'Quần short', viewValue: 'Quần short' },
+    { value: 'Quần đùi', viewValue: 'Quần đùi' },
+    { value: 'Quần kaki ', viewValue: 'Quần kaki' },
+    { value: 'Quần baggy', viewValue: 'Quần baggy' },
+    { value: 'Áo Polo', viewValue: 'Áo Polo' },
+    { value: 'Áo FEAER ', viewValue: 'Áo FEAER' },
+    { value: 'Áo sơ mi', viewValue: 'Áo sơ mi' },
+    { value: 'Áo Sơ Mi Nam Đũi Kẻ Sọc Caro ', viewValue: 'Áo Sơ Mi Nam Đũi Kẻ Sọc Caro' },
+    { value: 'Áo phông trơn unisex nam', viewValue: 'Áo phông trơn unisex nam' },
+    { value: 'Áo Thun Nam SADBOIZ', viewValue: 'Áo Thun Nam SADBOIZ' },
+    { value: 'Áo thun HOTTREND', viewValue: 'Áo thun HOTTREND' },
+    { value: 'Áo Thun Nam Thể Thao', viewValue: 'Áo Thun Nam Thể Thao' },
+    { value: 'Áo thun Highclub Basic Tee', viewValue: 'Áo thun Highclub Basic Tee' },
+    { value: 'Áo SIGNATURE', viewValue: 'Áo SIGNATURE' },
+    { value: 'Áo thun Bad Habits ROCKER', viewValue: 'Áo thun Bad Habits ROCKER' },
+    { value: 'Áo sơ mi trơn big size LADOS ', viewValue: 'Áo sơ mi trơn big size LADOS ' },
+    { value: 'Áo Thun Missout BUNNY&BEAR TEE', viewValue: 'Áo Thun Missout BUNNY&BEAR TEE' },
+    { value: 'GIÀY THỂ THAO NAM', viewValue: 'GIÀY THỂ THAO NAM' },
+    { value: 'Giày thể thao nữ CV classic', viewValue: 'Giày thể thao nữ CV classic' },
+    { value: 'Giày thể thao nữ Ulzzang', viewValue: 'Giày thể thao nữ Ulzzang' },
+    { value: 'GIÀY NỮ AIR TRẮNG', viewValue: 'GIÀY NỮ AIR TRẮNG' },
+    { value: 'Giày 𝐌𝐋𝐁 boston bản trung', viewValue: 'Giày 𝐌𝐋𝐁 boston bản trung' },
+    { value: 'Giày AF1 trắng', viewValue: 'Giày AF1 trắng' },
+    { value: 'Áo sơ mi tay ngắn nam nữ', viewValue: 'Áo sơ mi tay ngắn nam nữ' },
+    { value: ' Áo Sơmi nhung Tăm vintage', viewValue: 'Áo Sơmi nhung Tăm vintage' },
+    { value: 'Đồng Hồ Nam PAGINI PA9966 ', viewValue: 'Đồng Hồ Nam PAGINI PA9966 ' },
+    { value: 'Đồng Hồ Nữ Julius Hàn Quốc', viewValue: 'Đồng Hồ Nữ Julius Hàn Quốc' },
+    { value: 'Đồng hồ WR unisex dây hơp kim CS1', viewValue: 'Đồng hồ WR unisex dây hơp kim CS1' },
+    { value: 'Đồng hồ Nữ Army', viewValue: 'Đồng hồ Nữ Army' },
+    { value: 'Đồng Hồ Nam Crnaira Japan C3079', viewValue: 'Đồng Hồ Nam Crnaira Japan C3079' },
+    { value: 'Giây lưng thắt lưng nam ', viewValue: 'Giây lưng thắt lưng nam ' },
+    { value: 'Dây Nịt Nam Mặt GG', viewValue: 'Dây Nịt Nam Mặt GG' },
+    { value: 'Thắt Lưng Da Bò SÁP', viewValue: 'Thắt Lưng Da Bò SÁP' },
   ];
   //Data gia nhap
-  GiaNhapArray:any = [
-    {value: '100000', viewValue: '100000'},
-    {value: '157000', viewValue: '157000'},
-    {value: '213000', viewValue: '213000'},
-    {value: '311000', viewValue: '311000'},
-    {value: '900000', viewValue: '900000'},
-    {value: '402000', viewValue: '402000'},
-    {value: '450000', viewValue: '450000'},
-    {value: '650000', viewValue: '650000'},
-    {value: '550000', viewValue: '550000'},
-    {value: '350000', viewValue: '350000'},
+  GiaNhapArray: any = [
+    { value: '100000', viewValue: '100000' },
+    { value: '157000', viewValue: '157000' },
+    { value: '213000', viewValue: '213000' },
+    { value: '311000', viewValue: '311000' },
+    { value: '900000', viewValue: '900000' },
+    { value: '402000', viewValue: '402000' },
+    { value: '450000', viewValue: '450000' },
+    { value: '650000', viewValue: '650000' },
+    { value: '550000', viewValue: '550000' },
+    { value: '350000', viewValue: '350000' },
   ];
   //Data gia ban
-  GiaBanArray:any = [
-    {value: '150000', viewValue: '150000'},
-    {value: '257000', viewValue: '257000'},
-    {value: '513000', viewValue: '513000'},
-    {value: '411000', viewValue: '411000'},
-    {value: '150000', viewValue: '150000'},
-    {value: '602000', viewValue: '602000'},
-    {value: '650000', viewValue: '650000'},
-    {value: '750000', viewValue: '750000'},
-    {value: '850000', viewValue: '850000'},
-    {value: '650000', viewValue: '650000'},
+  GiaBanArray: any = [
+    { value: '150000', viewValue: '150000' },
+    { value: '257000', viewValue: '257000' },
+    { value: '513000', viewValue: '513000' },
+    { value: '411000', viewValue: '411000' },
+    { value: '150000', viewValue: '150000' },
+    { value: '602000', viewValue: '602000' },
+    { value: '650000', viewValue: '650000' },
+    { value: '750000', viewValue: '750000' },
+    { value: '850000', viewValue: '850000' },
+    { value: '650000', viewValue: '650000' },
   ];
   //Data mota
-  MoTaArray:any = [
-    {value: `Ngày này, áo thun tay lỡ Unisex form rộng đang ngày càng trở nên phổ biến và đa dạng với các mẫu thiết kế độc đáo bắt mắt, thậm chí còn bắt kịp nhiều trào lưu xu hướng đặc biệt là phong cách Hàn Quốc. 
+  MoTaArray: any = [
+    {
+      value: `Ngày này, áo thun tay lỡ Unisex form rộng đang ngày càng trở nên phổ biến và đa dạng với các mẫu thiết kế độc đáo bắt mắt, thậm chí còn bắt kịp nhiều trào lưu xu hướng đặc biệt là phong cách Hàn Quốc. 
     Do đó, việc tìm hiểu tất tần tật về áo thun tay lỡ nam/nữ là cần thiết giúp bạn luôn cập nhật những mẫu thiết kế mới nhất. Điều này sẽ giúp bạn có nhiều sự lựa chọn mới mẻ và đa dạng phong cách thời trang của bạn.`,
-     viewValue:  `Ngày này, áo thun tay lỡ Unisex form rộng đang ngày càng trở nên phổ biến và đa dạng với các mẫu thiết kế độc đáo bắt mắt, thậm chí còn bắt kịp nhiều trào lưu xu hướng đặc biệt là phong cách Hàn Quốc. 
+      viewValue: `Ngày này, áo thun tay lỡ Unisex form rộng đang ngày càng trở nên phổ biến và đa dạng với các mẫu thiết kế độc đáo bắt mắt, thậm chí còn bắt kịp nhiều trào lưu xu hướng đặc biệt là phong cách Hàn Quốc. 
     Do đó, việc tìm hiểu tất tần tật về áo thun tay lỡ nam/nữ là cần thiết giúp bạn luôn cập nhật những mẫu thiết kế mới nhất. Điều này sẽ giúp bạn có nhiều sự lựa chọn mới mẻ và đa dạng phong cách thời trang của bạn.`
     },
     {
-      value: `Mẫu quần tây đen công sở cạp lưng cao Form thoải mái, không quá ôm và quá đứng dáng đâu các nàng ạ, mặc lên vừa thoải mái vận động mà vẫn đứng dáng. Các nàng có thể mặc quần tây nữ công sở phối áo sơ mi mặc đi làm, đi chơi, học sinh mặc đi học đều xinh ạ.`, 
-    viewValue:  `Mẫu quần tây đen công sở cạp lưng cao Form thoải mái, không quá ôm và quá đứng dáng đâu các nàng ạ, mặc lên vừa thoải mái vận động mà vẫn đứng dáng. Các nàng có thể mặc quần tây nữ công sở phối áo sơ mi mặc đi làm, đi chơi, học sinh mặc đi học đều xinh ạ.`
-  },
-  {
-    value: `Đối với một người đàn ông hiện đại thì vẻ bề ngoài rất quan trọng, ngoài những bộ suit lịch lãm thì phụ kiện đồng hồ cũng là điểm nhấn không thể thiếu trên cổ tay của họ. Vì thế một chiếc đồng hồ đẹp cho nam luôn là mục đích tìm kiếm của đa số đàn ông hiện nay.`, 
-  viewValue:  `Đối với một người đàn ông hiện đại thì vẻ bề ngoài rất quan trọng, ngoài những bộ suit lịch lãm thì phụ kiện đồng hồ cũng là điểm nhấn không thể thiếu trên cổ tay của họ. Vì thế một chiếc đồng hồ đẹp cho nam luôn là mục đích tìm kiếm của đa số đàn ông hiện nay.`
-},
-{
-  value: `Mang đến hình ảnh là một người lịch lãm, nhưng không kém phần thanh lịch, thời trang giày nổi bật cùng dáng xỏ tiện lợi giúp bạn có thể sử dụng ở bất cứ đâu.`, 
-viewValue:  `Mang đến hình ảnh là một người lịch lãm, nhưng không kém phần thanh lịch, thời trang giày nổi bật cùng dáng xỏ tiện lợi giúp bạn có thể sử dụng ở bất cứ đâu.`
-},
+      value: `Mẫu quần tây đen công sở cạp lưng cao Form thoải mái, không quá ôm và quá đứng dáng đâu các nàng ạ, mặc lên vừa thoải mái vận động mà vẫn đứng dáng. Các nàng có thể mặc quần tây nữ công sở phối áo sơ mi mặc đi làm, đi chơi, học sinh mặc đi học đều xinh ạ.`,
+      viewValue: `Mẫu quần tây đen công sở cạp lưng cao Form thoải mái, không quá ôm và quá đứng dáng đâu các nàng ạ, mặc lên vừa thoải mái vận động mà vẫn đứng dáng. Các nàng có thể mặc quần tây nữ công sở phối áo sơ mi mặc đi làm, đi chơi, học sinh mặc đi học đều xinh ạ.`
+    },
+    {
+      value: `Đối với một người đàn ông hiện đại thì vẻ bề ngoài rất quan trọng, ngoài những bộ suit lịch lãm thì phụ kiện đồng hồ cũng là điểm nhấn không thể thiếu trên cổ tay của họ. Vì thế một chiếc đồng hồ đẹp cho nam luôn là mục đích tìm kiếm của đa số đàn ông hiện nay.`,
+      viewValue: `Đối với một người đàn ông hiện đại thì vẻ bề ngoài rất quan trọng, ngoài những bộ suit lịch lãm thì phụ kiện đồng hồ cũng là điểm nhấn không thể thiếu trên cổ tay của họ. Vì thế một chiếc đồng hồ đẹp cho nam luôn là mục đích tìm kiếm của đa số đàn ông hiện nay.`
+    },
+    {
+      value: `Mang đến hình ảnh là một người lịch lãm, nhưng không kém phần thanh lịch, thời trang giày nổi bật cùng dáng xỏ tiện lợi giúp bạn có thể sử dụng ở bất cứ đâu.`,
+      viewValue: `Mang đến hình ảnh là một người lịch lãm, nhưng không kém phần thanh lịch, thời trang giày nổi bật cùng dáng xỏ tiện lợi giúp bạn có thể sử dụng ở bất cứ đâu.`
+    },
   ];
   //Data thanh phan
-  ThanhPhanArray:any = [
-    {value: `Vải Thun Lạnh co giãn 4 chiều, thoáng mát, mềm mịn mát mẻ, phù hợp với mọi hoạt động dã ngoại, thể thao, hay dạo phố.`,
-     viewValue:  `Vải Thun Lạnh co giãn 4 chiều, thoáng mát, mềm mịn mát mẻ, phù hợp với mọi hoạt động dã ngoại, thể thao, hay dạo phố.`
+  ThanhPhanArray: any = [
+    {
+      value: `Vải Thun Lạnh co giãn 4 chiều, thoáng mát, mềm mịn mát mẻ, phù hợp với mọi hoạt động dã ngoại, thể thao, hay dạo phố.`,
+      viewValue: `Vải Thun Lạnh co giãn 4 chiều, thoáng mát, mềm mịn mát mẻ, phù hợp với mọi hoạt động dã ngoại, thể thao, hay dạo phố.`
     },
-    {value: `Thân giày thể thao chủ yếu sử dụng vật liệu mesh (lưới), da tự nhiên hoặc da nhân tạo. `,
-     viewValue:  `Thân giày thể thao chủ yếu sử dụng vật liệu mesh (lưới), da tự nhiên hoặc da nhân tạo. `
+    {
+      value: `Thân giày thể thao chủ yếu sử dụng vật liệu mesh (lưới), da tự nhiên hoặc da nhân tạo. `,
+      viewValue: `Thân giày thể thao chủ yếu sử dụng vật liệu mesh (lưới), da tự nhiên hoặc da nhân tạo. `
     },
-    {value: `Kaki `,
-    viewValue:  `Kaki  `
-   },
-   {value: `Kim loại`,
-   viewValue:  `Kim loại `
-  },
+    {
+      value: `Kaki `,
+      viewValue: `Kaki  `
+    },
+    {
+      value: `Kim loại`,
+      viewValue: `Kim loại `
+    },
   ];
   //Data Huong dan
-  HuongDanArray:any = [
-    {value: `Ủi 180 độ, có thể phối với mọi loại đồ`,
-     viewValue:  `Ủi 180 độ, có thể phối với mọi loại đồ`
+  HuongDanArray: any = [
+    {
+      value: `Ủi 180 độ, có thể phối với mọi loại đồ`,
+      viewValue: `Ủi 180 độ, có thể phối với mọi loại đồ`
     },
-    {value: `Để ở nơi thoáng mát, tránh ẩm mốc`,
-    viewValue:  `Để ở nơi thoáng mát, tránh ẩm mốc`
-   },
+    {
+      value: `Để ở nơi thoáng mát, tránh ẩm mốc`,
+      viewValue: `Để ở nơi thoáng mát, tránh ẩm mốc`
+    },
   ];
 }
